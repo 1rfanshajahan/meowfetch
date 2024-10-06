@@ -1,0 +1,45 @@
+#!/bin/bash
+
+#system info fetcher focussed on cats aka cars
+
+function display_random_cat() {
+    # Path to the directory containing cat art files
+    local cat_dir=~/kode/meowfetch/cats
+    # Select a random file from the directory
+    local random_cat=$(ls "$cat_dir" | shuf -n 1)
+    # Display the selected ASCII art
+    cat "$cat_dir/$random_cat"
+}
+
+# Get RAM usage
+RAM=$(free -h | awk '/^Mem:/ {print $3 "/" $2}')
+
+# Get uptime
+UPTIME=$(uptime -p)
+
+# Get storage usage
+STORAGE=$(df -h / | awk 'NR==2 {print $3 "/" $2}')
+
+# Get battery status (if applicable)
+if command -v acpi &> /dev/null; then
+    BATTERY=$(acpi -b | awk '{print $3 " " $4}' | tr -d ',')
+else
+    BATTERY="N/A"
+fi
+
+# Get font information (example with xset)
+FONT=$(xset q | grep -A 1 "Font Path" | tail -n 1)
+
+# Display the random cat ASCII art
+display_random_cat
+
+# Display the gathered information
+echo "ehm.. here you go "
+echo " "
+echo " $UPTIME"
+echo " $RAM"
+echo " $STORAGE"
+echo " $BATTERY"
+echo " CozetteVector"
+
+
